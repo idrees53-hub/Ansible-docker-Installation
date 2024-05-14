@@ -1,0 +1,36 @@
+---
+ - name: installation of docker 
+   hosts: localhost 
+   tasks: 
+     - name: installing required packages 
+       yum:
+         name: yum-utils 
+         state: present
+       when: ansible_facts.distribution == "RedHat" 
+
+     - name: Add Docker repository
+       command: sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+       when: ansible_facts.distribution == "RedHat"
+
+     - name: install the required packages
+       yum:
+         name: 
+            - docker-ce
+            - docker-ce-cli
+            - containerd.io
+            - docker-buildx-plugin
+            - docker-compose-plugin
+         state: present
+       when: ansible_facts.distribution == "RedHat"
+
+     - name: start the docker service
+       service:
+         name: docker
+         state: started 
+         enabled: yes   
+       when: ansible_facts.distribution == "RedHat"
+
+      
+
+
+
